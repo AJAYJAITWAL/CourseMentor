@@ -1,4 +1,9 @@
 class Api::CoursesController < ApplicationController
+  def index
+    courses = Course.includes(:tutors).all
+    render json: courses, include: :tutors
+  end
+
   def create
     course = Course.new(course_params)
 
@@ -7,11 +12,6 @@ class Api::CoursesController < ApplicationController
     else
       render json: { errors: course.errors.full_messages }, status: :unprocessable_entity
     end
-  end
-
-  def index
-    courses = Course.all
-    render json: courses, include: :tutors
   end
 
   private
